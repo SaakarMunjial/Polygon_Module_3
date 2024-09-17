@@ -1,25 +1,19 @@
 pragma circom 2.0.0;
 
-/*This circuit template checks that Q  is the output of the custom circuit img in readme file of a and b.*/  
+template LogicalCircuit () {
 
-template VibCustomCircuit () {  
-
-   // signal inputs
-
+   // signal input
    signal input A;
    signal input B;
 
    // signal from gates
-
-   signal X;
-   signal Y;
+   signal x;
+   signal y;
 
    // final signal output
-
    signal output Q;
 
-   // component gates used to create custom circuit
-
+   // component gates used to create custom logical LogicalCircuit
    component andGate = AND();
    component notGate = NOT();
    component orGate = OR();
@@ -27,13 +21,22 @@ template VibCustomCircuit () {
    // circuit logic
    andGate.a <== A;
    andGate.b <== B;
-   X <== andGate.out;
+   x <== andGate.out;
    notGate.in <== B;
-   Y <== notGate.out;
-   orGate.a <== X;
-   orGate.b <== Y;
-   Q <== orGate.out;  
+   y <== notGate.out;
+   orGate.a <== x;
+   orGate.b <== y;
+   Q <== orGate.out; 
+
+
+   // logging value of Q on custom inputs
+   if(A == 0){
+    if(B == 1){
+        log("When A = 0 and B = 1, value of Q is: ", Q);
+    }
+   }
 }
+
 template AND() {
     signal input a;
     signal input b;
@@ -41,12 +44,7 @@ template AND() {
 
     out <== a*b;
 }
-template NOT() {
-    signal input in;
-    signal output out;
 
-    out <== 1 + in - 2*in;
-}
 template OR() {
     signal input a;
     signal input b;
@@ -55,4 +53,11 @@ template OR() {
     out <== a + b - a*b;
 }
 
-component main = VibCustomCircuit();
+template NOT() {
+    signal input in;
+    signal output out;
+
+    out <== 1 + in - 2*in;
+}
+
+component main = LogicalCircuit();
